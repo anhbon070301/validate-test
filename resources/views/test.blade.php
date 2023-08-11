@@ -16,6 +16,41 @@
 </form>
 <script>
     $(document).ready(function() {
+        $.validator.addMethod("dependencyCheck", function() {
+        var files = $("#files").val();
+        var sitemap = $("#link_sitemap").val();
+
+        return files !== "" || sitemap !== "" || listFiles.length > 0;
+    });
+
+    $.validator.addMethod("fileExtension", function(value, element) {
+        var check = true;
+
+        var type = [
+            "text/plain",
+            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+            "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+            "text/csv",
+            "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+            "application/pdf",
+            "application/zip"
+        ];
+
+        if (listFiles.length > 0)
+        {
+            $.each(listFiles, function (key, value){
+                if (type.includes(value['type']) === false)
+                {
+                    console.log(1);
+                    check = false;
+                }
+            });
+        }
+
+        console.log(check);
+
+        return check;
+    });
         // Sử dụng FileReader để đọc dữ liệu tạm trước khi upload lên Server
         function readURL(input) {
             if (input.files && input.files[0]) {
